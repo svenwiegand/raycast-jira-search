@@ -1,5 +1,6 @@
-import { ResultItem } from "./types";
-import { jiraFetch } from "./jira";
+import {ResultItem} from "./types";
+import {jiraFetchObject} from "./jira";
+import {avatarPath} from "./avatar";
 
 interface IssueType {
     name: string,
@@ -41,13 +42,14 @@ function statusString(status: IssueStatus): string {
 
 export async function searchIssues(query: string): Promise<ResultItem[]> {
     const jql = query.length > 0 ? `text ~ "${query}" order by lastViewed desc` : "order by lastViewed desc"
-    const result = await jiraFetch<Issues>("/rest/api/3/search", { jql, fields })
-    return result.issues.map(issue => ({
+    const result = await jiraFetchObject<Issues>("/rest/api/3/search", { jql, fields })
+    const mapResult = async (issue: Issue) => ({
         id: issue.id,
         title: issue.fields.summary,
         subtitle: `${issue.key} · ${issue.fields.issuetype.name}`,
-        iconUrl: issue.fields.issuetype.iconUrl,
+        iconPath: await avatarPath(issue.fields.issuetype.iconUrl),
         accessory: statusString(issue.fields.status),
         url: "",
-    }))
+    })
+    return Promise.all(result.issues.map(mapResult))
 }

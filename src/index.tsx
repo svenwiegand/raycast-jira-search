@@ -20,6 +20,7 @@ export default function Command() {
     >
       {items.map(item => <List.Item
           key={item.id}
+          icon={item.iconPath}
           title={item.title}
           subtitle={item.subtitle}
           accessoryTitle={item.accessory}

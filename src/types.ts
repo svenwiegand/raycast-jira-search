@@ -2,7 +2,7 @@ export interface ResultItem {
     id: string,
     title: string,
     subtitle: string,
-    iconUrl: string,
+    iconPath?: string,
     url: string,
     accessory?: string,
 }

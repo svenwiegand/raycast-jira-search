@@ -1,5 +1,5 @@
 import {getPreferenceValues} from "@raycast/api"
-import fetch from "node-fetch"
+import fetch, {Response} from "node-fetch"
 
 const prefs: { domain: string, user: string, token: string } = getPreferenceValues()
 const headers = {
@@ -10,9 +10,15 @@ const init = {
     headers
 }
 
-export async function jiraFetch<Result>(path: string, params: { [key: string]: string }): Promise<Result> {
+type QueryParams = { [key: string]: string }
+
+export async function jiraFetchObject<Result>(path: string, params: QueryParams): Promise<Result> {
+    const response = await jiraFetch(path, params)
+    return await response.json() as unknown as Result
+}
+
+export async function jiraFetch(path: string, params: QueryParams): Promise<Response> {
     const paramKeys = Object.keys(params)
     const query = paramKeys.map(key => `${key}=${encodeURI(params[key])}`).join('&')
-    const response = await fetch(`https://${prefs.domain}/${path}?${query}`, init)
-    return response.json() as unknown as Result
+    return fetch(`https://${prefs.domain}/${path}?${query}`, init)
 }
