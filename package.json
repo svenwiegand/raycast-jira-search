@@ -13,6 +13,13 @@
       "subtitle": "Search for Jira issues",
       "description": "Search global issues with possibility to filter by project and type",
       "mode": "view"
+    },
+    {
+      "name": "avatar",
+      "title": "Reload Icons",
+      "subtitle": "Delete cached Jira icons and reload them",
+      "description": "Delete cached Jira icons and reload them",
+      "mode": "no-view"
     }
   ],
   "preferences": [

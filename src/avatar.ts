@@ -1,5 +1,5 @@
 import path from "path";
-import {environment} from "@raycast/api";
+import {environment, showToast, ToastStyle} from "@raycast/api";
 import {promises as fs} from "fs";
 import {jiraFetch} from "./jira";
 
@@ -7,6 +7,8 @@ interface AvatarSpec {
     type: string,
     id: string,
 }
+
+const avatarDir = path.join(environment.supportPath, "avatar")
 
 async function isFile(path: string): Promise<boolean> {
     try {
@@ -18,7 +20,7 @@ async function isFile(path: string): Promise<boolean> {
 }
 
 function filePath(avatar: AvatarSpec): string {
-    return path.join(environment.supportPath, "avatar", avatar.type, `${avatar.id}.png`)
+    return path.join(avatarDir, avatar.type, `${avatar.id}.png`)
 }
 
 async function downloadAvatar(avatar: AvatarSpec, filePath: string): Promise<string> {
@@ -46,4 +48,9 @@ export async function avatarPath(url: string): Promise<string | undefined> {
     } else {
         return undefined
     }
+}
+
+export default async function ClearAvatarCache() {
+    await fs.rm(avatarDir, { force: true, recursive: true })
+    showToast(ToastStyle.Success, "Reload Icons", "Icons successfully reloaded")
 }
