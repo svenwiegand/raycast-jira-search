@@ -1,5 +1,5 @@
 import {ResultItem} from "./types";
-import {jiraFetchObject} from "./jira";
+import {jiraFetchObject, jiraUrl} from "./jira";
 import {avatarPath} from "./avatar";
 
 interface IssueType {
@@ -49,7 +49,7 @@ export async function searchIssues(query: string): Promise<ResultItem[]> {
         subtitle: `${issue.key} · ${issue.fields.issuetype.name}`,
         iconPath: await avatarPath(issue.fields.issuetype.iconUrl),
         accessory: statusString(issue.fields.status),
-        url: "",
+        url: `${jiraUrl}/browse/${issue.key}`,
     })
     return Promise.all(result.issues.map(mapResult))
 }

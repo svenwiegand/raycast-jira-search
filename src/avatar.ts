@@ -24,7 +24,7 @@ function filePath(avatar: AvatarSpec): string {
 }
 
 async function downloadAvatar(avatar: AvatarSpec, filePath: string): Promise<string> {
-    const urlPath = `/rest/api/3/universal_avatar/view/type/${avatar.type}/avatar/${avatar.id}`
+    const urlPath = `rest/api/3/universal_avatar/view/type/${avatar.type}/avatar/${avatar.id}`
     const { dir } = path.parse(filePath)
     await fs.mkdir(dir, { recursive: true })
     const response = await jiraFetch(urlPath, { size: "medium", format: "png" })
