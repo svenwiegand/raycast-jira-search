@@ -1,0 +1,62 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "jira-search",
+  "title": "Jira Search",
+  "description": "Search your jira issues (more tolerant, than the integrated jira extension), boards, filters and projects.",
+  "icon": "command-icon.png",
+  "author": "sven",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "index",
+      "title": "Search issues",
+      "subtitle": "Search for Jira issues",
+      "description": "Search global issues with possibility to filter by project and type",
+      "mode": "view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "domain",
+      "type": "textfield",
+      "required": true,
+      "title": "Jira Domain",
+      "description": "Your Jira domain (e.g. 'my.atlassian.net')",
+      "placeholder": "my.atlassian.net"
+    },
+    {
+      "name": "user",
+      "type": "textfield",
+      "required": true,
+      "title": "User Name",
+      "description": "Your Jira user name",
+      "placeholder": "me@company.com"
+    },
+    {
+      "name": "token",
+      "type": "password",
+      "required": true,
+      "title": "API Token",
+      "description": "Your API token as described at https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/#get-an-api-token"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.26.3",
+    "node-fetch": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "~16.10.0",
+    "@types/react": "^17.0.28",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "react-devtools": "^4.19.2",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "lint": "ray lint"
+  }
+}
