@@ -8,7 +8,7 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
+      "name": "issue",
       "title": "Search issues",
       "subtitle": "Search for Jira issues",
       "description": "Search global issues with possibility to filter by project and type",

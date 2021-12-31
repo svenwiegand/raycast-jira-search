@@ -1,6 +1,6 @@
-import {ResultItem} from "./types";
 import {jiraFetchObject, jiraUrl} from "./jira";
 import {avatarPath} from "./avatar";
+import {ResultItem, SearchCommand} from "./command";
 
 interface IssueType {
     name: string,
@@ -52,4 +52,8 @@ export async function searchIssues(query: string): Promise<ResultItem[]> {
         url: `${jiraUrl}/browse/${issue.key}`,
     })
     return Promise.all(result.issues.map(mapResult))
+}
+
+export default function SearchIssueCommand() {
+    return SearchCommand(searchIssues)
 }
