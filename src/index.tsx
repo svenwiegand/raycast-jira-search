@@ -1,7 +1,7 @@
 import {List} from "@raycast/api";
 import {useEffect, useState} from "react";
-import {searchIssues} from "./search/issue";
-import {ResultItem} from "./search/types";
+import {searchIssues} from "./issue";
+import {ResultItem} from "./types";
 
 export default function Command() {
   const [query, setQuery] = useState<string>("")

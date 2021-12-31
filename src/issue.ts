@@ -1,5 +1,5 @@
 import { ResultItem } from "./types";
-import { jiraFetch } from "./api";
+import { jiraFetch } from "./jira";
 
 interface IssueType {
     name: string,
