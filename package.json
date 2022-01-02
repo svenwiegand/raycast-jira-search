@@ -29,6 +29,13 @@
       "mode": "view"
     },
     {
+      "name": "project",
+      "title": "Search Projects",
+      "subtitle": "Jira",
+      "description": "Search Jira projects by title",
+      "mode": "view"
+    },
+    {
       "name": "avatar",
       "title": "Reload Icons",
       "subtitle": "Jira",
