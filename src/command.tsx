@@ -1,14 +1,7 @@
-import {ActionPanel, CopyToClipboardAction, List, OpenInBrowserAction} from "@raycast/api"
+import {ActionPanel, CopyToClipboardAction, List, ListItemProps, OpenInBrowserAction} from "@raycast/api"
 import {useEffect, useState} from "react"
 
-export interface ResultItem {
-    id: string,
-    title: string,
-    subtitle: string,
-    iconPath?: string,
-    url: string,
-    accessory?: string,
-}
+export type ResultItem = ListItemProps & { url: string }
 type SearchFunction = (query: string) => Promise<ResultItem[]>
 
 export function SearchCommand(search: SearchFunction) {
@@ -21,11 +14,7 @@ export function SearchCommand(search: SearchFunction) {
     const onSearchChange = (newSearch: string) => setQuery(newSearch)
     const buildItem = (item: ResultItem) => (
         <List.Item
-            key={item.id}
-            icon={item.iconPath}
-            title={item.title}
-            subtitle={item.subtitle}
-            accessoryTitle={item.accessory}
+            {...item}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section title="URL">

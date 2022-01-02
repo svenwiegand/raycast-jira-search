@@ -1,5 +1,5 @@
 import {jiraFetchObject, jiraUrl} from "./jira";
-import {avatarPath} from "./avatar";
+import {jiraAvatarImage} from "./avatar";
 import {ResultItem, SearchCommand} from "./command";
 
 interface IssueType {
@@ -47,7 +47,7 @@ export async function searchIssues(query: string): Promise<ResultItem[]> {
         id: issue.id,
         title: issue.fields.summary,
         subtitle: `${issue.key} · ${issue.fields.issuetype.name}`,
-        iconPath: await avatarPath(issue.fields.issuetype.iconUrl),
+        icon: await jiraAvatarImage(issue.fields.issuetype.iconUrl),
         accessory: statusString(issue.fields.status),
         url: `${jiraUrl}/browse/${issue.key}`,
     })

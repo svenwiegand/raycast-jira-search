@@ -1,5 +1,5 @@
 import path from "path";
-import {environment, showToast, ToastStyle} from "@raycast/api";
+import {environment, ImageLike, showToast, ToastStyle} from "@raycast/api";
 import {promises as fs} from "fs";
 import {jiraFetch} from "./jira";
 
@@ -39,7 +39,7 @@ function parseAvatarUrl(url: string): AvatarSpec | null {
     return match ? { type: match[1], id: match[2] } : null
 }
 
-export async function avatarPath(url: string): Promise<string | undefined> {
+export async function jiraAvatarImage(url: string): Promise<ImageLike | undefined> {
     const avatar = parseAvatarUrl(url)
     if (avatar) {
         const path = filePath(avatar)
