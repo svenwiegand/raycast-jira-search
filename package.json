@@ -9,15 +9,21 @@
   "commands": [
     {
       "name": "issue",
-      "title": "Search issues",
-      "subtitle": "Search for Jira issues",
-      "description": "Search global issues with possibility to filter by project and type",
+      "title": "Search Issues",
+      "description": "Search Jira issues by text, type and project",
+      "mode": "view"
+    },
+    {
+      "name": "board",
+      "title": "Search Boards",
+      "subtitle": "Jira",
+      "description": "Search Jira boards by title",
       "mode": "view"
     },
     {
       "name": "avatar",
       "title": "Reload Icons",
-      "subtitle": "Delete cached Jira icons and reload them",
+      "subtitle": "Jira",
       "description": "Delete cached Jira icons and reload them",
       "mode": "no-view"
     }
