@@ -10,35 +10,35 @@
     {
       "name": "issue",
       "title": "Search Issues",
-      "subtitle": "Jira",
+      "subtitle": "Jira Search",
       "description": "Search Jira issues by text, type and project",
       "mode": "view"
     },
     {
       "name": "board",
       "title": "Search Boards",
-      "subtitle": "Jira",
+      "subtitle": "Jira Search",
       "description": "Search Jira boards by title",
       "mode": "view"
     },
     {
       "name": "filter",
       "title": "Search Filters",
-      "subtitle": "Jira",
+      "subtitle": "Jira Search",
       "description": "Search Jira filters by title",
       "mode": "view"
     },
     {
       "name": "project",
       "title": "Search Projects",
-      "subtitle": "Jira",
+      "subtitle": "Jira Search",
       "description": "Search Jira projects by title",
       "mode": "view"
     },
     {
       "name": "avatar",
       "title": "Reload Icons",
-      "subtitle": "Jira",
+      "subtitle": "Jira Search",
       "description": "Delete cached Jira icons and reload them",
       "mode": "no-view"
     }
