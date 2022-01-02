@@ -28,5 +28,5 @@ export async function searchBoards(query: string): Promise<ResultItem[]> {
 }
 
 export default function SearchBoardCommand() {
-    return SearchCommand(searchBoards, "Search issues by text, @project and #issueType")
+    return SearchCommand(searchBoards, "Search board by title")
 }

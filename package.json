@@ -10,6 +10,7 @@
     {
       "name": "issue",
       "title": "Search Issues",
+      "subtitle": "Jira",
       "description": "Search Jira issues by text, type and project",
       "mode": "view"
     },
@@ -18,6 +19,13 @@
       "title": "Search Boards",
       "subtitle": "Jira",
       "description": "Search Jira boards by title",
+      "mode": "view"
+    },
+    {
+      "name": "filter",
+      "title": "Search Filters",
+      "subtitle": "Jira",
+      "description": "Search Jira filters by title",
       "mode": "view"
     },
     {
