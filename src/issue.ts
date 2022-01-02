@@ -41,6 +41,11 @@ function statusString(status: IssueStatus): string {
     return `${status.name} ${symbol}`
 }
 
+function isIssueKey(query: string): boolean {
+    const issueKeyPattern = /^[a-z]+-[0-9]+$/i
+    return query.match(issueKeyPattern) !== null
+}
+
 function buildJql(query: string): string {
     const spaceAndInvalidCharacters = /[- +!"]/;
     const terms = query.split(spaceAndInvalidCharacters).filter(term => term.length > 0)
@@ -65,8 +70,12 @@ function buildJql(query: string): string {
     return jql + " order by lastViewed desc"
 }
 
+function jqlFor(query: string): string {
+    return isIssueKey(query) ? `key=${query}` : buildJql(query)
+}
+
 export async function searchIssues(query: string): Promise<ResultItem[]> {
-    const jql = buildJql(query)
+    const jql = jqlFor(query)
     const result = await jiraFetchObject<Issues>("/rest/api/3/search", { jql, fields })
     const mapResult = async (issue: Issue): Promise<ResultItem> => ({
         id: issue.id,
