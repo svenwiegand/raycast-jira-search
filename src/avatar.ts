@@ -28,29 +28,36 @@ async function downloadAvatar(avatar: AvatarSpec, filePath: string): Promise<str
     const { dir } = path.parse(filePath)
     await fs.mkdir(dir, { recursive: true })
     const response = await jiraFetch(urlPath, { size: "medium", format: "png" })
-    const body = await response.arrayBuffer()
-    await fs.writeFile(filePath, new DataView(body))
-    return filePath
+    if (response.ok) {
+        const body = await response.arrayBuffer()
+        await fs.writeFile(filePath, new DataView(body))
+        return filePath
+    } else {
+        throw Error(`Jira responded ${response.status} for ${urlPath}`)
+    }
 }
 
-function parseAvatarUrl(url: string): AvatarSpec | null {
+function parseAvatarUrl(url: string): AvatarSpec {
     const pattern = /.*\/universal_avatar\/view\/type\/([a-z]+)\/avatar\/([0-9]+)/
     const match = url.match(pattern)
-    return match ? { type: match[1], id: match[2] } : null
+    if (!match) throw Error(`Unexpected icon path ${url}`)
+    return { type: match[1], id: match[2] }
 }
 
 export async function jiraAvatarImage(url: string): Promise<ImageLike | undefined> {
-    const avatar = parseAvatarUrl(url)
-    if (avatar) {
+    try {
+        const avatar = parseAvatarUrl(url)
         const path = filePath(avatar)
         const isAvailable = await isFile(path)
-        return isAvailable ? path : downloadAvatar(avatar, path)
-    } else {
+        return isAvailable ? path : await downloadAvatar(avatar, path)
+    } catch (e) {
+        console.error(e)
+        await showToast(ToastStyle.Failure, "Failed to fetch Jira Icons", e instanceof Error ? e.message : undefined)
         return undefined
     }
 }
 
 export default async function ClearAvatarCache() {
     await fs.rm(avatarDir, { force: true, recursive: true })
-    showToast(ToastStyle.Success, "Reload Icons", "Icons successfully reloaded")
+    await showToast(ToastStyle.Success, "Reload Icons", "Icons successfully reloaded")
 }

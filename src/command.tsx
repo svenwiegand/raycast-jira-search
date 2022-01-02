@@ -14,6 +14,7 @@ export function SearchCommand(search: SearchFunction) {
     const onSearchChange = (newSearch: string) => setQuery(newSearch)
     const buildItem = (item: ResultItem) => (
         <List.Item
+            key={item.id}
             {...item}
             actions={
                 <ActionPanel>
