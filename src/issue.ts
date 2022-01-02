@@ -25,7 +25,7 @@ interface Issue {
 }
 
 interface Issues {
-    issues: Issue[]
+    issues?: Issue[]
 }
 
 const fields = "summary,issuetype,status"
@@ -40,18 +40,42 @@ function statusString(status: IssueStatus): string {
     return `${status.name} ${symbol}`
 }
 
+function buildJql(query: string): string {
+    const spaceAndInvalidCharacters = /[- +!"]/;
+    const terms = query.split(spaceAndInvalidCharacters).filter(term => term.length > 0)
+
+    const collectPrefixed = (prefix: string, terms: string[]): string[] => terms
+        .filter(term => term.startsWith(prefix) && term.length > prefix.length)
+        .map(term => term.substring(prefix.length))
+    const projects = collectPrefixed("@", terms)
+    const issueTypes = collectPrefixed("#", terms)
+    const textTerms = terms.filter(term => !"@#".includes(term[0]))
+
+    const escapeStr = (str: string) => `"${str}"`
+    const inClause = (entity: string, items: string[]) =>
+        items.length > 0 ? `${entity} IN (${items.map(escapeStr)})` : undefined
+    const jqlConditions = [
+        inClause("project", projects),
+        inClause("issueType", issueTypes),
+        ...textTerms.map(term => `text~"${term}*"`),
+    ]
+
+    const jql = jqlConditions.filter(condition => condition !== undefined).join(" AND ")
+    return jql + " order by lastViewed desc"
+}
+
 export async function searchIssues(query: string): Promise<ResultItem[]> {
-    const jql = query.length > 0 ? `text ~ "${query}" order by lastViewed desc` : "order by lastViewed desc"
+    const jql = buildJql(query)
     const result = await jiraFetchObject<Issues>("/rest/api/3/search", { jql, fields })
-    const mapResult = async (issue: Issue) => ({
+    const mapResult = async (issue: Issue): Promise<ResultItem> => ({
         id: issue.id,
         title: issue.fields.summary,
         subtitle: `${issue.key} · ${issue.fields.issuetype.name}`,
         icon: await jiraAvatarImage(issue.fields.issuetype.iconUrl),
-        accessory: statusString(issue.fields.status),
+        accessoryTitle: statusString(issue.fields.status),
         url: `${jiraUrl}/browse/${issue.key}`,
     })
-    return Promise.all(result.issues.map(mapResult))
+    return result.issues && result.issues.length > 0 ? Promise.all(result.issues.map(mapResult)) : []
 }
 
 export default function SearchIssueCommand() {
