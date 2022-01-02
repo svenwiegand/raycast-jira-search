@@ -4,7 +4,7 @@ import {useEffect, useState} from "react"
 export type ResultItem = ListItemProps & { url: string }
 type SearchFunction = (query: string) => Promise<ResultItem[]>
 
-export function SearchCommand(search: SearchFunction) {
+export function SearchCommand(search: SearchFunction, searchBarPlaceholder?: string) {
     const [query, setQuery] = useState("")
     const [items, setItems] = useState<ResultItem[]>([])
     useEffect(() => {
@@ -38,9 +38,10 @@ export function SearchCommand(search: SearchFunction) {
 
     return (
         <List
-            throttle
-            onSearchTextChange={onSearchChange}
             isLoading={isLoading}
+            onSearchTextChange={onSearchChange}
+            searchBarPlaceholder={searchBarPlaceholder}
+            throttle
         >
             {items.map(buildItem)}
         </List>

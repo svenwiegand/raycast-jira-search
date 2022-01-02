@@ -79,5 +79,5 @@ export async function searchIssues(query: string): Promise<ResultItem[]> {
 }
 
 export default function SearchIssueCommand() {
-    return SearchCommand(searchIssues)
+    return SearchCommand(searchIssues, "Search issues by text, @project and #issueType")
 }
