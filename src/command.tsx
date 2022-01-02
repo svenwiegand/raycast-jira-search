@@ -5,11 +5,16 @@ export type ResultItem = ListItemProps & { url: string }
 type SearchFunction = (query: string) => Promise<ResultItem[]>
 
 export function SearchCommand(search: SearchFunction) {
-    const [query, setQuery] = useState<string>("")
+    const [query, setQuery] = useState("")
     const [items, setItems] = useState<ResultItem[]>([])
     useEffect(() => {
-        search(query).then(resultItems => setItems(resultItems))
+        setIsLoading(true)
+        search(query).then(resultItems => {
+            setItems(resultItems)
+            setIsLoading(false)
+        })
     }, [query])
+    const [isLoading, setIsLoading] = useState(false)
 
     const onSearchChange = (newSearch: string) => setQuery(newSearch)
     const buildItem = (item: ResultItem) => (
@@ -35,6 +40,7 @@ export function SearchCommand(search: SearchFunction) {
         <List
             throttle
             onSearchTextChange={onSearchChange}
+            isLoading={isLoading}
         >
             {items.map(buildItem)}
         </List>
