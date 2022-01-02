@@ -2,6 +2,7 @@ import path from "path";
 import {environment, ImageLike, showToast, ToastStyle} from "@raycast/api";
 import {promises as fs} from "fs";
 import {jiraFetch} from "./jira";
+import {Warning} from "./exception";
 
 interface AvatarSpec {
     type: string,
@@ -40,7 +41,7 @@ async function downloadAvatar(avatar: AvatarSpec, filePath: string): Promise<str
 function parseAvatarUrl(url: string): AvatarSpec {
     const pattern = /.*\/universal_avatar\/view\/type\/([a-z]+)\/avatar\/([0-9]+)/
     const match = url.match(pattern)
-    if (!match) throw Error(`Unexpected icon path ${url}`)
+    if (!match) throw new Warning(`Unexpected icon path ${url}`)
     return { type: match[1], id: match[2] }
 }
 
@@ -51,9 +52,14 @@ export async function jiraAvatarImage(url: string): Promise<ImageLike | undefine
         const isAvailable = await isFile(path)
         return isAvailable ? path : await downloadAvatar(avatar, path)
     } catch (e) {
-        console.error(e)
-        await showToast(ToastStyle.Failure, "Failed to fetch Jira Icons", e instanceof Error ? e.message : undefined)
-        return undefined
+        if (e instanceof Warning) {
+            console.warn(e)
+            return url
+        } else {
+            console.error(e)
+            await showToast(ToastStyle.Failure, "Failed to get Jira Icons", e instanceof Error ? e.message : undefined)
+            return undefined
+        }
     }
 }
 

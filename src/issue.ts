@@ -3,6 +3,7 @@ import {jiraAvatarImage} from "./avatar";
 import {ResultItem, SearchCommand} from "./command";
 
 interface IssueType {
+    id: string,
     name: string,
     iconUrl: string,
 }
