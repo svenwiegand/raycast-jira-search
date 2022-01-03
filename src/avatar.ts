@@ -29,13 +29,9 @@ async function downloadAvatar(avatar: AvatarSpec, filePath: string): Promise<str
     const { dir } = path.parse(filePath)
     await fs.mkdir(dir, { recursive: true })
     const response = await jiraFetch(urlPath, { size: "medium", format: "png" })
-    if (response.ok) {
-        const body = await response.arrayBuffer()
-        await fs.writeFile(filePath, new DataView(body))
-        return filePath
-    } else {
-        throw Error(`Jira responded ${response.status} for ${urlPath}`)
-    }
+    const body = await response.arrayBuffer()
+    await fs.writeFile(filePath, new DataView(body))
+    return filePath
 }
 
 function parseAvatarUrl(url: string): AvatarSpec {

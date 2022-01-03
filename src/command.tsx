@@ -1,4 +1,12 @@
-import {ActionPanel, CopyToClipboardAction, List, ListItemProps, OpenInBrowserAction} from "@raycast/api"
+import {
+    ActionPanel,
+    CopyToClipboardAction,
+    List,
+    ListItemProps,
+    OpenInBrowserAction,
+    showToast,
+    ToastStyle
+} from "@raycast/api"
 import {useEffect, useState} from "react"
 
 export type ResultItem = ListItemProps & { url: string }
@@ -7,14 +15,25 @@ type SearchFunction = (query: string) => Promise<ResultItem[]>
 export function SearchCommand(search: SearchFunction, searchBarPlaceholder?: string) {
     const [query, setQuery] = useState("")
     const [items, setItems] = useState<ResultItem[]>([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string>()
     useEffect(() => {
+        setError(undefined)
         setIsLoading(true)
         search(query).then(resultItems => {
             setItems(resultItems)
             setIsLoading(false)
         })
+        .catch(e => {
+            setItems([])
+            if (e instanceof Error) {
+                setError(e.message)
+            }
+        })
+        .finally(() => {
+            setIsLoading(false)
+        })
     }, [query])
-    const [isLoading, setIsLoading] = useState(false)
 
     const onSearchChange = (newSearch: string) => setQuery(newSearch)
     const buildItem = (item: ResultItem) => (
@@ -35,6 +54,10 @@ export function SearchCommand(search: SearchFunction, searchBarPlaceholder?: str
             }
         />
     )
+
+    if (error) {
+        showToast(ToastStyle.Failure, "An error occured", error)
+    }
 
     return (
         <List
