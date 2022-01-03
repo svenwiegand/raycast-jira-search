@@ -1,6 +1,7 @@
 import {jiraFetchObject, jiraUrl} from "./jira";
 import {jiraAvatarImage} from "./avatar";
 import {ResultItem, SearchCommand} from "./command";
+import {Color, ColorLike, Icon, Image, ImageSource} from "@raycast/api";
 
 interface IssueType {
     id: string,
@@ -31,14 +32,13 @@ interface Issues {
 
 const fields = "summary,issuetype,status"
 
-function statusString(status: IssueStatus): string {
-    const symbolByStatusCategory: { [P: string]: string } = {
-        "new": "○",
-        "indeterminate": "◐",
-        "done": "●",
+function statusIcon(status: IssueStatus): Image {
+    const icon = (source: ImageSource, tintColor?: ColorLike) => ({ source, tintColor })
+    switch (status.statusCategory.key) {
+        case "done": return icon(Icon.Checkmark, Color.Green)
+        case "indeterminate": return icon(Icon.ArrowClockwise, Color.Blue)
+        default: return icon(Icon.Circle)
     }
-    const symbol = symbolByStatusCategory[status.statusCategory.key]
-    return `${status.name} ${symbol}`
 }
 
 function isIssueKey(query: string): boolean {
@@ -82,7 +82,8 @@ export async function searchIssues(query: string): Promise<ResultItem[]> {
         title: issue.fields.summary,
         subtitle: `${issue.key} · ${issue.fields.issuetype.name}`,
         icon: await jiraAvatarImage(issue.fields.issuetype.iconUrl),
-        accessoryTitle: statusString(issue.fields.status),
+        accessoryIcon: statusIcon(issue.fields.status),
+        accessoryTitle: issue.fields.status.name,
         url: `${jiraUrl}/browse/${issue.key}`,
     })
     return result.issues && result.issues.length > 0 ? Promise.all(result.issues.map(mapResult)) : []
