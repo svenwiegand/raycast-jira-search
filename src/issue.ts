@@ -60,6 +60,7 @@ function buildJql(query: string): string {
     const textTerms = terms
         .filter(term => !"@#".includes(term[0]))
         .flatMap(term => term.split(unwantedTextTermChars))
+        .filter(term => term.length > 0)
 
     const escapeStr = (str: string) => `"${str}"`
     const inClause = (entity: string, items: string[]) =>
