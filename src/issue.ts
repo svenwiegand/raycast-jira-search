@@ -56,7 +56,7 @@ function buildJql(query: string): string {
         .map(term => term.substring(prefix.length))
     const projects = collectPrefixed("@", terms)
     const issueTypes = collectPrefixed("#", terms)
-    const unwantedTextTermChars = /[-+!]/
+    const unwantedTextTermChars = /[-+!*]/
     const textTerms = terms
         .filter(term => !"@#".includes(term[0]))
         .flatMap(term => term.split(unwantedTextTermChars))
